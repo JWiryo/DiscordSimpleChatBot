@@ -2,8 +2,10 @@ package handler
 
 import (
 	speech "DiscordSimpleChatBot/speech"
+	"fmt"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/turnage/graw/reddit"
 )
 
 // MessageCreate - Detect Message Create Event
@@ -17,12 +19,34 @@ func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	if m.Content == "!" {
+	if m.Content == "/" {
 		s.ChannelMessageSend(m.ChannelID, speech.IntroHelp)
 	}
 
-	// If the message is "ping" reply with "Pong!"
-	if m.Content == "!momonga" {
+	if m.Content == "/momonga" {
 		s.ChannelMessageSend(m.ChannelID, speech.Introduction)
 	}
+
+	if m.Content == "/meme" {
+		s.ChannelMessageSend(m.ChannelID, ScrapeMemes())
+	}
+}
+
+// ScrapeMemes - Scrape subreddit r/memes to retrieve latest memes
+func ScrapeMemes() string {
+
+	bot, err := reddit.NewBotFromAgentFile("./constants/discordbot.agent", 0)
+	if err != nil {
+		fmt.Println("Failed to create bot handle: ", err)
+		return err.Error()
+	}
+
+	harvest, err := bot.Listing("/r/memes", "")
+	if err != nil {
+		fmt.Println("Failed to fetch /r/memes: ", err)
+		return err.Error()
+	}
+
+	post := harvest.Posts[1:2]
+	return post[0].URL
 }
