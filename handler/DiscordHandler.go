@@ -3,6 +3,8 @@ package handler
 import (
 	speech "DiscordSimpleChatBot/speech"
 	"fmt"
+	"strconv"
+	"strings"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/turnage/graw/reddit"
@@ -27,13 +29,13 @@ func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		s.ChannelMessageSend(m.ChannelID, speech.Introduction)
 	}
 
-	if m.Content == "/meme" {
-		s.ChannelMessageSend(m.ChannelID, ScrapeMemes())
+	if strings.Fields(m.Content)[0] == "/meme" {
+		s.ChannelMessageSend(m.ChannelID, ScrapeMemes(strings.Fields(m.Content)[1]))
 	}
 }
 
 // ScrapeMemes - Scrape subreddit r/memes to retrieve latest memes
-func ScrapeMemes() string {
+func ScrapeMemes(s string) string {
 
 	bot, err := reddit.NewBotFromAgentFile("./constants/discordbot.agent", 0)
 	if err != nil {
@@ -47,6 +49,11 @@ func ScrapeMemes() string {
 		return err.Error()
 	}
 
-	post := harvest.Posts[1:2]
-	return post[0].URL
+	pageNum, err := strconv.Atoi(s)
+	if err != nil || pageNum < 0 {
+		return "Page number is invalid (must be >0)"
+	}
+
+	post := harvest.Posts[pageNum]
+	return post.URL
 }
