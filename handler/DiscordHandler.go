@@ -35,7 +35,7 @@ func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 }
 
 // ScrapeMemes - Scrape subreddit r/memes to retrieve latest memes
-func ScrapeMemes(s string) string {
+func ScrapeMemes(pageNumberString string) string {
 
 	bot, err := reddit.NewBotFromAgentFile("./constants/discordbot.agent", 0)
 	if err != nil {
@@ -49,7 +49,7 @@ func ScrapeMemes(s string) string {
 		return err.Error()
 	}
 
-	pageNum, err := strconv.Atoi(s)
+	pageNum, err := strconv.Atoi(pageNumberString)
 	if err != nil || pageNum < 0 {
 		return "Page number is invalid (must be >0)"
 	}
