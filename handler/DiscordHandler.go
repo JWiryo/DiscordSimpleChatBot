@@ -57,3 +57,8 @@ func ScrapeMemes(s string) string {
 	post := harvest.Posts[pageNum]
 	return post.URL
 }
+
+// GetStockInformation - Get Stock information given ticker symbol
+func GetStockInformation(ticker string) string {
+	return "This feature is not supported yet"
+}
