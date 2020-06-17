@@ -2,11 +2,14 @@ package handler
 
 import (
 	speech "DiscordSimpleChatBot/speech"
+	"context"
 	"fmt"
 	"strconv"
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/goinvest/iexcloud/examples/iexcloud/domain"
+	iex "github.com/goinvest/iexcloud/v2"
 	"github.com/turnage/graw/reddit"
 )
 
@@ -31,6 +34,10 @@ func MessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	if strings.Fields(m.Content)[0] == "/meme" {
 		s.ChannelMessageSend(m.ChannelID, ScrapeMemes(strings.Fields(m.Content)[1]))
+	}
+
+	if strings.Fields(m.Content)[0] == "/stock" {
+		s.ChannelMessageSend(m.ChannelID, GetStockInformation(strings.Fields(m.Content)[1]))
 	}
 }
 
@@ -60,5 +67,19 @@ func ScrapeMemes(pageNumberString string) string {
 
 // GetStockInformation - Get Stock information given ticker symbol
 func GetStockInformation(ticker string) string {
-	return "This feature is not supported yet"
+
+	cfg, err := domain.ReadConfig("./constants/iexconfig.toml")
+	if err != nil {
+		fmt.Println("Error reading config file: ", err)
+		return err.Error()
+	}
+
+	client := iex.NewClient(cfg.Token, iex.WithBaseURL(cfg.BaseURL))
+	quote, err := client.Quote(context.Background(), ticker)
+	if err != nil {
+		fmt.Println("Error getting quote: ", err)
+		return err.Error()
+	}
+
+	return fmt.Sprint("Current price of ", quote.Symbol, " is $", quote.LatestPrice)
 }
