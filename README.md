@@ -2,6 +2,10 @@
 
 <img src="https://www.startinop.com/wp-content/uploads/2020/03/Capture-d%E2%80%99e%CC%81cran-2020-03-19-a%CC%80-20.10.14-1.png">
 
+</br>
+
+[![CircleCI](https://circleci.com/gh/JWiryo/DiscordSimpleChatBot.svg?style=shield)](https://app.circleci.com/pipelines/github/JWiryo/DiscordSimpleChatBot)
+
 ## Table of Contents
 
 - [Introduction](#Introduction)
