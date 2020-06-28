@@ -12,12 +12,12 @@ jobs:
       - go/load-cache
       - go/mod-download
       - go/save-cache
-  working_directory: ~/
 orbs:
   go: circleci/go@1.3.0
   git-secret: lyvly/git-secret@0.1.0
 workflows:
   main:
     jobs:
+      - git-secret/install_and_decrypt:
+          working_directory: ~/
       - build
-      - git-secret/install_and_decrypt
