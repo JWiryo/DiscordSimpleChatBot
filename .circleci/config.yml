@@ -9,6 +9,8 @@ jobs:
       tag: "1.14"
     steps:
       - checkout
+      - git-secret/install_and_decrypt:
+        working_directory: ~/
       - go/load-cache
       - go/mod-download
       - go/save-cache
@@ -18,6 +20,4 @@ orbs:
 workflows:
   main:
     jobs:
-      - git-secret/install_and_decrypt:
-          working_directory: ~/
       - build
