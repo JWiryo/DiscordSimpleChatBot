@@ -15,7 +15,9 @@
 # vendor/
 
 # API Tokens #
-constants/
+constants/*.go
+constants/*.agent
+constants/*.toml
 .gitsecret/keys/random_seed
 !*.secret
 
