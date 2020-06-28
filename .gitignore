@@ -16,3 +16,5 @@
 
 # API Tokens #
 constants/
+.gitsecret/keys/random_seed
+!*.secret
