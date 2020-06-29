@@ -14,7 +14,7 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install git-secret
       - run: echo $GPG_PRIVATE_KEY_V2 | tr ',' '\n' > ./private_key.gpg
       - run: gpg --batch --import ./private_key.gpg
-      - run: git secret reveal
+      - run: git secret reveal -p $CIRCLECI_GPG_PASSWORD
       - go/load-cache
       - go/mod-download
       - go/save-cache
