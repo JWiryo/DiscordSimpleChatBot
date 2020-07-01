@@ -20,7 +20,14 @@ jobs:
       - go/save-cache
 orbs:
   go: circleci/go@1.3.0
+  aws-code-deploy: circleci/aws-code-deploy@1.0.1
 workflows:
   main:
     jobs:
       - build
+      - aws-code-deploy/deploy:
+          application-name: DiscordSimpleChatBot
+          bundle-bucket: discordbot-bucket-southeast-asia-1
+          bundle-key: circleci
+          deployment-group: DiscordSimpleChatBotDeploymentGroup
+          service-role-arn: arn:aws:iam::452152933678:role/AWS-CodeDeploy-Role
